@@ -40,10 +40,11 @@ const viewBookingsController = async (req, res) => {
         // If no bookings are found
         if (bookings.length === 0) {
             return res.status(200).json({
-                message: "No bookings found for this bus."
+                message: "No bookings found for this bus.",
+                businfo:bus
             });
         }
-
+        
         // If bookings are found, return the bookings with user details
         res.status(200).json({
             businfo:bus,

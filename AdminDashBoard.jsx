@@ -147,7 +147,7 @@ const AdminDashboard = () => {
 
           <h3>Booked Seats</h3>
           <ul>
-            {selectedBus.bookings.length > 0 ? (
+            {(selectedBus.bookings && selectedBus.bookings.length) > 0 ? (
               selectedBus.bookings.map((booking, index) => (
                 <li key={index}>
                   <span>
