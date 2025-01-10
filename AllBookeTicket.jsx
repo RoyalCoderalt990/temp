@@ -53,21 +53,23 @@ const AllBookeTicket = () => {
       }else{
         setBook(true)
       }
-      alert("Ticket has been Cancel");
+      alert("Ticket has been Cancelled");
     } catch (error) {
       alert(error.message);
     }
   }
+  console.log(bookedTicket);
   return (
     <div>
       <h1 className="Heading">All Booked Tickets</h1>
       <div className="bookedTickets-background"></div>
       <div className="bookedTickets-content">
       <div className="bookedTickets-buttons">
+      <Link to="/"><button>Home</button></Link>
       <Link to="/cart"><button>My cart</button></Link>
-      <Link to="/seatbook"><button>Seat Availble</button></Link>
+      {/* <Link to="/seatbook"><button>Seat Available</button></Link> */}
       </div>
-      <h1 style={{textAlign: "center", marginTop: "100px", fontSize: "40px"}}>ONLY ONE STEP AWAY, PAY NOW!</h1>
+      <h1 style={{textAlign: "center", marginTop: "100px", fontSize: "40px"}}>HURRAY! READY, SET, GO!</h1>
       <div className="Table">
         {loading && (
           <table>
@@ -83,6 +85,7 @@ const AllBookeTicket = () => {
                 <th>TO</th>
                 <th>SEAT NO</th>
                 <th>PRICE</th>
+                <th>AVAILABLE SEATS</th>
                 <th>ACTION</th>
               </tr>
             </thead>
@@ -91,15 +94,28 @@ const AllBookeTicket = () => {
                 textAlign: "center",
               }}
             >
-              {bookedTicket.map((item, index) => (
-                <tr key={item._id}>
-                  <td>{item.busId.name}</td>
-                  <td>{item.busId.from}</td>
-                  <td>{item.busId.to}</td>
-                  
-                  <td>{item.seatNo}</td>
-                  <td>{item.busId.price}</td>
-                  <td>
+              {bookedTicket.map((item) => {
+                  const totalSeats = 20; // Assuming each bus has 20 seats; replace with dynamic data if available
+                  const bookedSeats = Object.keys(item.busId.seats || {}).filter(
+                    (seat) => item.busId.seats[seat]
+                  ).length;
+                  const availableSeats = totalSeats - bookedSeats;
+
+                  return (
+                    <tr key={item._id}>
+                      <td>{item.busId.name}</td>
+                      <td>{item.busId.from}</td>
+                      <td>{item.busId.to}</td>
+                      <td>{item.seatNo}</td>
+                      <td>{item.busId.price}</td>
+                      <td>
+                        {availableSeats}
+                        <br />
+                        <Link to={`/seatbook/${item.busId._id}`}>
+                          <button>View</button>
+                        </Link>
+                      </td>
+                      <td>
                     <div className="action">
                     
                       <button
@@ -113,7 +129,8 @@ const AllBookeTicket = () => {
                     </div>
                   </td>
                 </tr>
-              ))}
+                  );
+                })}
             </tbody>
           </table>
         )}
